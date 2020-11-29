@@ -20,14 +20,17 @@ int main()
         ++i;
         if (buf[0] != eventSize)
         {
-            std::cout << "wrongsize";
             break;
         }
+        
         
         float x = *(float*)(buf + 0x18);
         float y = *(float*)(buf + 0x1c);
         float z = *(float*)(buf + 0x20);
+        long t = *(long*)(buf + 0x10);
+        //sensor type here int s = *(int*)(buf + 0x08);
         std::cout << x << ' ' << y << ' ' << z << std::endl;
+        ofs.write(buf + 0x10, 0x14); // write timestamp and sensor data
         
 
     }
