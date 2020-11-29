@@ -6,27 +6,39 @@
 
 int main()
 {
+    const int eventSize = 0x68;
     std::ifstream ifs;
-    ifs.open("loggerdemo.txt");
-    char buf[104];
+    ifs.open("loggerdata.txt", std::ifstream::binary);
+    char buf[eventSize];
 
+    std::ofstream ofs;
+    ofs.open("prepareddata.txt",std::ifstream::binary);
+    int i = 0;
+    std::cout << ifs.good() << ifs.eof() << ifs.fail() << ifs.bad() << std::endl;
+    while (ifs.read(buf, eventSize))
+    {
+        ++i;
+        if (buf[0] != eventSize)
+        {
+            std::cout << "wrongsize";
+            break;
+        }
+        
+        float x = *(float*)(buf + 0x18);
+        float y = *(float*)(buf + 0x1c);
+        float z = *(float*)(buf + 0x20);
+        std::cout << x << ' ' << y << ' ' << z << std::endl;
+        
 
-    ifs.get(buf, 104);
-
-    std::cout << buf[0];
-    float x = *(float*)(buf + 0x18);
-    float y = *(float*)(buf + 0x1c);
-    float z = *(float*)(buf + 0x20);
-    std::cout << x << y << z;
-
+    }
+    std::cout << i << std::endl;
+    std::cout << ifs.good() << ifs.eof() << ifs.fail() << ifs.bad() << std::endl;
     ifs.close();
     ofs.close();
 
-    std::ofstream ofs;
-    ofs.open("test.txt");
-    ofs.write(buf, 104);
     
-    std::cout << "Hello World!\n";
+    //ofs.write(buf, 104);
+    
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
